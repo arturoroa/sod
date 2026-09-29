@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": false,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "react-native": ["src/shims/react-native.tsx"],
+      "react-native-webview": ["src/shims/react-native-webview.tsx"],
+      "expo-document-picker": ["src/shims/expo-document-picker.ts"],
+      "@react-native-picker/picker": ["src/shims/react-native-picker.tsx"],
+      "lucide-react-native": ["src/shims/lucide-react-native.tsx"]
+    }
+  },
+  "include": ["src", "vite.config.ts", "nativewind-env.d.ts"],
+  "exclude": ["src/App2.tsx", "src/App3.tsx", "src/main/analysis copy_14-03-2025.tsx"]
+}

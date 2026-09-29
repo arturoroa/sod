@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Request</title>
+    <style>
+        #dashboardContainer {
+            width: 100%;
+            height: 600px;
+            border: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Dashboard Request Form</h2>
+    <form id="dashboardForm">
+        <label for="userId">User ID:</label><br>
+        <input type="text" id="userId" required><br><br>
+
+        <label for="company">Company:</label><br>
+        <input type="text" id="company" required><br><br>
+
+        <label for="postUrl">POST URL:</label><br>
+        <input type="url" id="postUrl" placeholder="Enter the URL to send the POST request" required><br><br>
+
+        <button type="submit">Get Dashboard</button>
+    </form>
+
+    <div id="result"></div>
+    <iframe id="dashboardContainer" style="display:none;"></iframe>
+
+    <script>
+        document.getElementById('dashboardForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const userId = document.getElementById('userId').value;
+            const company = document.getElementById('company').value;
+            const postUrl = document.getElementById('postUrl').value;
+
+            const jsonData = JSON.stringify({
+                UserID: userId,
+                Company: company
+            });
+
+            fetch(postUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: jsonData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.dashboard_url) {
+                    const iframe = document.getElementById('dashboardContainer');
+                    iframe.src = data.dashboard_url;
+                    iframe.style.display = 'block';
+                    document.getElementById('result').innerHTML = 'Dashboard loaded successfully.';
+                } else {
+                    document.getElementById('result').innerHTML = 'Error: Dashboard URL not received.';
+                }
+            })
+            .catch((error) => {
+                document.getElementById('result').innerHTML = 'Error: ' + error;
+            });
+        });
+    </script>
+</body>
+</html>

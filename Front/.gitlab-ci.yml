@@ -1,0 +1,36 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"'
+  auto_cancel:
+    on_new_commit: interruptible
+
+stages:
+  - deploy
+  - cleanup
+  
+deploy:
+  stage: deploy
+  before_script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+  script:
+    - pnpm dev --host 0.0.0.0 --port 8081 & echo $! > /nhome/SODUI_process.pid
+    - sleep infinity
+  tags:
+    - SODUI
+  artifacts:
+    paths:
+      - /nhome/SODUI_process.pid
+  interruptible: true
+
+cleanup:
+  stage: cleanup
+  script:
+    - if [ -f /nhome/SODUI_process.pid ]; then
+        pid=$(cat /nhome/SODUI_process.pid);
+        kill -TERM $pid || true;
+        rm /nhome/SODUI_process.pid;
+      fi
+  when: always
+  tags:
+    - SODUI

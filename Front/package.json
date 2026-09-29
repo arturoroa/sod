@@ -1,0 +1,32 @@
+{
+  "name": "sodf",
+  "license": "0BSD",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.20",
+    "chart.js": "^4.4.8",
+    "classnames": "^2.5.1",
+    "lucide-react": "^0.511.0",
+    "postcss": "^8.4.49",
+    "primereact": "^10.9.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "@types/react": "~18.3.12",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.3.3",
+    "vite": "^5.4.10"
+  },
+  "private": true
+}

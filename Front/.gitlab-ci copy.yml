@@ -1,0 +1,36 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"'
+  auto_cancel:
+    on_new_commit: interruptible
+    
+stages:
+  #- build
+  - deploy
+
+#build:
+#  stage: build
+#  script:
+#    - which npm
+#    - echo ${PATH}
+#    - ls -lh $(which npm)
+#    - echo "Build stage completed"
+#  cache:
+#    paths:
+#      - node_modules/
+#  artifacts:
+#    paths:
+#      - node_modules/
+
+deploy:
+  stage: deploy
+  before_script:
+    - npm install
+    - export CI=false
+  script:
+    - npx expo start --web & echo $! #This is the process 
+    #- tail -f /dev/null
+    #- echo "Deployment stage completed"
+  tags:
+    - SODUI
+    

@@ -1,0 +1,39 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  NETSUITE_OAUTH_TOKEN_URL: "https://oauth.netsuite.com/oauth2/v1/token"
+  NETSUITE_SCOPE: "rest_webservices"
+
+before_script:
+  - npm install -g @oracle/suitecloud-cli
+  - apt-get update && apt-get install -y jq   # Si usas una imagen de Linux que no tiene jq
+
+build:
+  stage: build
+  script:
+    - suitecloud project:validate
+
+deploy:
+  stage: deploy
+  script:
+    - |
+      TOKEN_RESPONSE=$(curl -s -X POST "$NETSUITE_OAUTH_TOKEN_URL" \
+      -H "Content-Type: application/x-www-form-urlencoded" \
+      -d "grant_type=client_credentials&client_id=$CLIENT_ID&client_secret=$CLIENT_SECRET&scope=$NETSUITE_SCOPE")
+
+      export ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r '.access_token')
+
+      if [ "$ACCESS_TOKEN" = "null" ] || [ -z "$ACCESS_TOKEN" ]; then
+        echo "Error obteniendo token OAuth 2.0"
+        echo $TOKEN_RESPONSE
+        exit 1
+      fi
+
+      echo "Token OAuth 2.0 obtenido correctamente"
+
+    - suitecloud project:deploy --account $ACCOUNT_ID --bearer-token $ACCESS_TOKEN --bundle
+
+  only:
+    - main
